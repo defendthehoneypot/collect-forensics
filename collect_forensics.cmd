@@ -14,7 +14,7 @@ REM Microsoft pslist.exe, Download and Info: https://technet.microsoft.com/en-us
 REM 
 REM Folder Structure:
 REM		- Main Directory containing collect_forensics.cmd
-REM			-tools: contains binaries need for script
+REM			-tools: contains binaries needed for script
 
 REM Setup:
 REM Set base folder, set input source file if needed, and make Results directory.
