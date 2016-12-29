@@ -10,7 +10,7 @@ REM
 REM Additional Tools Needed:
 REM Microsoft psexec.exe, Download and Info: https://technet.microsoft.com/en-us/sysinternals/pxexec
 REM Microsoft autorunssc.exe, Download and Info: https://technet.microsoft.com/en-us/sysinternals/bb963902
-REM Microsoft pslist.exe, Download and Info: https://technet.microsoft.com/en-us/sysinternals/pslist.aspx
+REM Microsoft pslist.exe, Download and Info: https://technet.microsoft.com/en-us/sysinternals/pslist.aspx (Requires remote registry service to be running)
 REM 
 REM Folder Structure:
 REM		- Main Directory containing collect_forensics.cmd
@@ -49,7 +49,7 @@ echo #######################################
 echo Collect process list
 echo #######################################
 echo.
-for /F %%i in (hosts.txt) do %scriptlocation%\tools\pslist.exe -accepteula -nobanner -t %%i >> %scriptlocation%Results_%dtstamp%\%%i-processlist.csv
+for /F %%i in (hosts.txt) do %scriptlocation%\tools\pslist.exe -accepteula -nobanner -t \\%%i >> %scriptlocation%Results_%dtstamp%\%%i-processlist.txt
 
 echo.
 echo #######################################
