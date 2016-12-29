@@ -13,13 +13,21 @@ REM Microsoft autorunssc.exe, Download and Info: https://technet.microsoft.com/e
 REM 
 REM Folder Structure:
 REM		- Main Directory containing collect_forensics.cmd
+REM			-tools: contains binaries need for script
+
+REM Setup:
+REM Set base folder, set input source file if needed, and make Results directory.
+SET scriptlocation=%~dp0
+SET src=%1
+SET dtstamp=%date:~-4%%date:~4,2%%date:~7,2%
+mkdir Results_%dtstamp%
 
 echo.
 echo #######################################
-echo Create Local Directory by Computer name
+echo Create Local Directory for tools and output
 echo #######################################
 echo.
-for /F %%i in (hosts.txt) do mkdir C:\Tools\forensics\output\%%i
+for /F %%i in (hosts.txt) do mkdir %scriptlocation%Results_%dtstamp%\%%i
 
 echo.
 echo #######################################
@@ -33,45 +41,45 @@ echo #######################################
 echo copy executable files to remote system
 echo #######################################
 echo.
-for /F %%i in (hosts.txt) do xcopy /y c:\tools\autorunsc.exe \\%%i\c$\windows\tools
+for /F %%i in (hosts.txt) do xcopy /y %scriptlocation%\tools\autorunsc.exe \\%%i\c$\windows\tools
 
 echo.
 echo #######################################
-echo Search for executable files within Users directory
+echo Search for files within Users directory
 echo #######################################
 echo.
-for /F %%i in (hosts.txt) do dir /s /a \\%%i\c$\Users\*.exe  >> .\output\%%i\%%i-binaries.txt
-for /F %%i in (hosts.txt) do dir /s /a \\%%i\c$\Users\*.ps1  >> .\output\%%i\%%i-binaries.txt
-for /F %%i in (hosts.txt) do dir /s /a \\%%i\c$\Users\*.vbs  >> .\output\%%i\%%i-binaries.txt
-for /F %%i in (hosts.txt) do dir /s /a \\%%i\c$\Users\*.vb  >> .\output\%%i\%%i-binaries.txt
+for /F %%i in (hosts.txt) do dir /s /a \\%%i\c$\Users\*.exe  >> %scriptlocation%Results_%dtstamp%\%%i\%%i-binaries.txt
+for /F %%i in (hosts.txt) do dir /s /a \\%%i\c$\Users\*.ps1  >> %scriptlocation%Results_%dtstamp%\%%i\%%i-binaries.txt
+for /F %%i in (hosts.txt) do dir /s /a \\%%i\c$\Users\*.vbs  >> %scriptlocation%Results_%dtstamp%\%%i\%%i-binaries.txt
+for /F %%i in (hosts.txt) do dir /s /a \\%%i\c$\Users\*.vb  >> %scriptlocation%Results_%dtstamp%\%%i\%%i-binaries.txt
 
 echo.
 echo #######################################
-echo Run network statistics command
+echo Collect network statistics command
 echo #######################################
 echo.
-for /F %%i in (hosts.txt) do psexec.exe -accepteula \\%%i netstat -n >> .\output\%%i\%%i-networkinfo.txt
+for /F %%i in (hosts.txt) do psexec.exe -accepteula \\%%i netstat -n >> %scriptlocation%Results_%dtstamp%\%%i\%%i-networkinfo.txt
 
 echo.
 echo #######################################
-echo Run network statistics command
+echo Collect DNS
 echo #######################################
 echo.
-for /F %%i in (hosts.txt) do psexec.exe -accepteula \\%%i ipconfig /displaydns >> .\output\%%i\%%i-dns.txt
+for /F %%i in (hosts.txt) do psexec.exe -accepteula \\%%i ipconfig /displaydns >> %scriptlocation%Results_%dtstamp%\%%i\%%i-dns.txt
 
 echo.
 echo #######################################
 echo Run autorunsc.exe to collect information about autostart locations
 echo #######################################
 echo.
-for /F %%i in (hosts.txt) do psexec.exe -accepteula \\%%i c:\windows\tools\autorunsc.exe -accepteula -a * -ct >> .\output\%%i\%%i.csv
+for /F %%i in (hosts.txt) do psexec.exe -accepteula \\%%i c:\windows\tools\autorunsc.exe -accepteula -a * -ct >> %scriptlocation%Results_%dtstamp%\%%i\%%i.csv
 
 echo.
 echo #######################################
 echo Run streams to collect ADS information
 echo #######################################
 echo.
-for /F %%i in (hosts.txt) do streams.exe -accepteula -s \\%%i\c$\windows\system32 >> .\output\%%i\%%i-streams.txt
+for /F %%i in (hosts.txt) do streams.exe -accepteula -s \\%%i\c$\windows\system32 >> %scriptlocation%Results_%dtstamp%\%%i\%%i-streams.txt
 
 echo.
 echo #######################################
