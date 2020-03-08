@@ -1,5 +1,5 @@
 #Command line tool to collect DFIR information from remote systems.
-doug@defendthehoneypot.com
+defendthehoneypot@gmail.com
 
 I designed this to be an easy way for collecting basic information using the cli</br>
 2016-12-29 Version 1.0</br>
